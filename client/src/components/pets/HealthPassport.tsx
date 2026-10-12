@@ -1,0 +1,10 @@
+import { HeartPulse, Plus } from 'lucide-react';
+import { EmptyState } from '../ui/PageContent';
+import Button from '../ui/Button';
+import type { PetDetails } from '../../types/pets';
+import { formatPetDate } from '../../lib/petInsights';
+import { PetFacts, PetSection, SourceBadge } from './PetUI';
+
+export default function HealthPassport({ details, onAdd }: { details: PetDetails; onAdd: () => void }) {
+  return <div className="pets-section-stack"><PetSection title="Health Passport" action={<Button type="button" size="sm" onClick={onAdd}><Plus size={15} />Add record</Button>}><p className="pets-muted">Owner-entered information and mock City Vet-verified records are labeled separately.</p><h3 className="pet-subtitle">Vaccination history</h3>{details.vaccinations.length ? <div className="pet-record-list">{[...details.vaccinations].sort((a, b) => b.date.localeCompare(a.date)).map(record => <article key={record.id} className="pet-record-item"><div><h4>{record.name}</h4><p>Recorded {formatPetDate(record.date)}</p><p>Next due: {formatPetDate(record.nextDue)}</p></div><SourceBadge source={record.source} /></article>)}</div> : <EmptyState icon={HeartPulse} title="No vaccination records" description="Add an existing record or certificate. A missing record does not mean a pet is unvaccinated." />}</PetSection><PetSection title="Identification & service history"><PetFacts items={[[ 'Spay / neuter status', details.neuterStatus ], [ 'Microchip', details.microchip ]]} /><h3 className="pet-subtitle">Official City Vet service records</h3>{details.services.length ? <div className="pet-record-list">{details.services.map(service => <article className="pet-record-item" key={service.id}><div><h4>{service.name}</h4><p>{formatPetDate(service.date)}</p></div><SourceBadge source={service.source} /></article>)}</div> : <p className="pets-muted">No City Vet service records in this preview.</p>}<p className="pet-record-caption">Verified labels represent sample records only. Owners cannot create or approve official records.</p></PetSection></div>;
+}

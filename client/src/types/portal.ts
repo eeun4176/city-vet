@@ -6,7 +6,11 @@ export interface Pet {
   age: string;
   sex: string;
   photo?: string;
+  registrationStatus?: RegistrationStatus;
+  registrationNumber?: string;
 }
+
+export type RegistrationStatus = 'Draft' | 'Pending Verification' | 'Needs Correction' | 'Registered';
 
 export type ApplicationStatus = 'Approved' | 'Pending' | 'Under review' | 'Declined';
 

@@ -9,7 +9,7 @@ const accountItems = defaultAccountItems;
 export default function OwnerLayout() {
   const { pathname } = useLocation();
   const mainRef = useRef<HTMLElement>(null);
-  const activeItem = [...defaultNavigationItems, ...accountItems].find(item => item.href === pathname)?.id ?? '';
+  const activeItem = [...defaultNavigationItems, ...accountItems].find(item => item.href === pathname || (item.href && item.href !== '/' && pathname.startsWith(`${item.href}/`)))?.id ?? '';
 
   useEffect(() => {
     document.title = `${[...defaultNavigationItems, ...accountItems].find(item => item.id === activeItem)?.label ?? 'Page not found'} | City Vet`;

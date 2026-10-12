@@ -1,48 +1,34 @@
-﻿import { useState } from 'react';
-import type { FormEvent } from 'react';
-import { Plus, PawPrint, ArrowLeft } from 'lucide-react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { PageHeader } from '../components/ui/PageContent';
-import { Panel } from '../components/ui/Card';
-import { PetCard } from '../components/ui/Card';
-import FormField from '../components/ui/FormField';
+import { useState } from 'react';
+import { Activity, CalendarDays, ChevronRight, FileText, HeartPulse, PawPrint, Search, ShieldCheck, SlidersHorizontal, UserRound } from 'lucide-react';
+import { Link, Navigate, useSearchParams } from 'react-router-dom';
+import { PetPhoto } from '../components/ui/Card';
+import { EmptyState } from '../components/ui/PageContent';
 import Input, { inputClasses } from '../components/ui/Input';
-import Button, { primaryButtonClasses } from '../components/ui/Button';
+import { ActivityTimeline, MockSyncState, PetFacts, PetSection, PetStat, PetTextLink, RegistrationBadge } from '../components/pets/PetUI';
 import { usePortal } from '../hooks/usePortal';
+import { emptyPetDetails } from '../data/mockPetRecords';
+import { needsAttention, upcomingAppointments } from '../lib/petInsights';
 
 export default function Pets() {
-  const { pets, addPet } = usePortal();
+  const { pets, requests, petDetails, activities } = usePortal();
   const [params, setParams] = useSearchParams();
-  const [error, setError] = useState('');
-  const selectedPet = pets.find(pet => pet.id === params.get('pet'));
-  const registering = params.get('view') === 'register';
-
-  function registerPet(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const name = String(data.get('name')).trim();
-    const breed = String(data.get('breed')).trim();
-    const age = String(data.get('age')).trim();
-    if (!name || !breed || !age) { setError('Enter a pet name, breed, and age.'); return; }
-    const id = crypto.randomUUID();
-    addPet({ id, name, breed, age, species: data.get('species') === 'Cat' ? 'Cat' : 'Dog', sex: String(data.get('sex')) });
-    setError('');
-    setParams({ pet: id });
-  }
-
-  return <>
-    <div className="flex flex-wrap items-start justify-between gap-4"><PageHeader title="My Pets" description="Your companions, their profiles, and the little details that matter." />{!registering && <Link to="/my-pets?view=register" className={primaryButtonClasses}><Plus className="size-4" aria-hidden="true" />Register pet</Link>}</div>
-    {registering ? <Panel title="Register a pet">
-      <p className="mb-6 text-xs leading-6 text-black-300">Try adding a pet to this preview. Profiles stay in this session and are not submitted to the City Veterinary Office.</p>
-      <form onSubmit={registerPet} className="max-w-2xl space-y-5">
-        <div className="grid gap-5 sm:grid-cols-2"><FormField label="Pet name"><Input name="name" required maxLength={60} autoFocus placeholder="e.g. Bailey" /></FormField><FormField label="Species"><select name="species" className={inputClasses}><option>Dog</option><option>Cat</option></select></FormField><FormField label="Breed"><Input name="breed" required maxLength={80} placeholder="e.g. Golden Retriever" /></FormField><FormField label="Age"><Input name="age" required maxLength={30} placeholder="e.g. 2 years" /></FormField><FormField label="Sex"><select name="sex" className={inputClasses}><option>Male</option><option>Female</option><option>Unknown</option></select></FormField></div>
-        {error && <p role="alert" className="text-xs text-error-700">{error}</p>}
-        <div className="flex flex-wrap items-center gap-4"><Button type="submit" ><PawPrint className="size-4" />Add preview pet</Button><Link to="/my-pets" className="secondary-button inline-flex items-center text-xs text-black-300 hover:text-primary-700">Cancel</Link></div>
-      </form>
-    </Panel> : <>
-      {selectedPet && <div className="mb-6"><Panel title={`${selectedPet.name}'s profile`}><Link to="/my-pets" className="secondary-button mb-5 inline-flex items-center gap-1 text-xs text-primary-700"><ArrowLeft className="size-3" />All pets</Link><dl className="grid gap-5 text-sm sm:grid-cols-2 lg:grid-cols-4">{[['Species', selectedPet.species], ['Breed', selectedPet.breed], ['Age', selectedPet.age], ['Sex', selectedPet.sex]].map(([label, value]) => <div key={label}><dt className="text-xs text-black-300">{label}</dt><dd className="mt-2 font-medium">{value}</dd></div>)}</dl></Panel></div>}
-      <div className="pet-card-grid">{pets.map(pet => <PetCard key={pet.id} pet={pet} />)}</div>
-      <p className="mt-6 text-xs text-black-300">Preview pet profiles · New pets are kept until this page is refreshed.</p>
-    </>}
-  </>;
+  const [filter, setFilter] = useState('All pets');
+  const [activityQuery, setActivityQuery] = useState('');
+  const [activityType, setActivityType] = useState('All activities');
+  const query = (params.get('q') ?? '').trim().toLowerCase();
+  const filtered = pets.filter(pet => `${pet.name} ${pet.species} ${pet.breed}`.toLowerCase().includes(query) && (filter === 'All pets' || filter === pet.species || (filter === 'Needs attention' && needsAttention(pet, petDetails[pet.id] ?? emptyPetDetails()))));
+  const selected = filtered.find(pet => pet.id === params.get('pet')) ?? filtered[0];
+  const details = selected ? petDetails[selected.id] ?? emptyPetDetails() : emptyPetDetails();
+  const recent = activities.filter(record => record.petId === selected?.id && (activityType === 'All activities' || record.type === activityType) && `${record.title} ${record.type} ${record.notes ?? ''}`.toLowerCase().includes(activityQuery.trim().toLowerCase()));
+  if (params.get('view') === 'register') return <Navigate to="/my-pets/new" replace />;
+  const profile = selected ? `/my-pets/${selected.id}` : '';
+  return <div className="pets-page"><div className="pets-landing-grid"><div className="pets-main-column">
+    <section aria-labelledby="pet-overview-heading"><div className="pets-section-heading"><h2 id="pet-overview-heading">Overview</h2><span className="pets-muted">A little care, all in one place</span></div><div className="pets-overview"><PetStat icon={PawPrint} label="Total Pets" value={pets.length} detail="Your companions" /><PetStat icon={CalendarDays} label="Upcoming Appointments" value={upcomingAppointments(requests).length} detail="Approved visits only" /><PetStat icon={ShieldCheck} label="Needs Attention" value={pets.filter(pet => needsAttention(pet, petDetails[pet.id] ?? emptyPetDetails())).length} detail="Profiles, records & follow-ups" /></div></section>
+    <section aria-labelledby="pet-list-heading"><div className="pets-section-heading"><h2 id="pet-list-heading">Your pets <span className="pets-count">{filtered.length}</span></h2><label className="pets-inline-filter"><SlidersHorizontal size={15} aria-hidden="true" /><span className="sr-only">Filter pets</span><select value={filter} onChange={event => setFilter(event.target.value)}><option>All pets</option><option>Dog</option><option>Cat</option><option>Needs attention</option></select></label></div><div className="pets-selection-grid">{filtered.map(pet => <article key={pet.id} className={`pets-selection-card pets-surface ${pet.id === selected?.id ? 'is-selected' : ''}`}><button type="button" className="pet-select-button" aria-pressed={pet.id === selected?.id} aria-label={`Select ${pet.name}`} onClick={() => setParams(current => { const next = new URLSearchParams(current); next.set('pet', pet.id); return next; }, { replace: true })}><PetPhoto pet={pet} className="pet-selection-photo" /><div><div className="pet-selection-name"><h3>{pet.name}</h3><span className="pet-species-tag">{pet.species}</span></div><p>{pet.breed}</p><p>{pet.age} · {pet.sex}</p><RegistrationBadge status={pet.registrationStatus} /></div></button><Link className="pet-selection-profile" to={`/my-pets/${pet.id}`}>View profile<ChevronRight size={15} aria-hidden="true" /></Link></article>)}</div>{!filtered.length && <EmptyState icon={PawPrint} title="No pets found" description="Try a different name or filter, or add a new pet." />}</section>
+    <PetSection title="Recent Pet Activities" action={selected && <PetTextLink to={`${profile}?section=timeline`}>View all</PetTextLink>}><div className="pet-activity-filters"><label className="pet-search-field"><Search size={15} aria-hidden="true" /><span className="sr-only">Search pet activities</span><Input type="search" placeholder="Search activities…" value={activityQuery} onChange={event => setActivityQuery(event.target.value)} /></label><label><span className="sr-only">Filter activity type</span><select className={inputClasses} value={activityType} onChange={event => setActivityType(event.target.value)}>{['All activities', 'Weight', 'Vaccination', 'Walk', 'Play', 'Care', 'Veterinary service', 'Follow-up'].map(type => <option key={type}>{type}</option>)}</select></label></div>{selected && <p className="pet-record-caption">Showing records for {selected.name}</p>}<ActivityTimeline records={recent} compact limit={5} />{recent.length > 5 && <p className="pet-record-caption">Showing the 5 most recent of {recent.length} matching records.</p>}</PetSection>
+  </div><aside className="pets-preview" aria-label="Selected pet preview">{selected ? <>
+    <section className="pets-surface pet-preview-identity"><PetPhoto pet={selected} className="pet-preview-photo" /><h2>{selected.name}</h2><p>{selected.breed} · {selected.age}</p><RegistrationBadge status={selected.registrationStatus} /><div className="pet-preview-shortcuts">{[{ label: 'Profile', icon: UserRound, section: 'profile' }, { label: 'Health Passport', icon: HeartPulse, section: 'passport' }, { label: 'Documents', icon: FileText, section: 'documents' }].map(({ label, icon: Icon, section }) => <Link to={`${profile}?section=${section}`} key={section}><span><Icon size={18} aria-hidden="true" /></span>{label}</Link>)}</div></section>
+    <PetSection title={`About ${selected.name}`}><PetFacts items={[[ 'Species', selected.species ], [ 'Breed', selected.breed ], [ 'Age', selected.age ], [ 'Sex', selected.sex ], [ 'Color', details.color ], [ 'Markings', details.markings ]]} /><PetTextLink to={profile}>View Full Profile</PetTextLink></PetSection>
+    <PetSection title="Quick Actions"><div className="pet-quick-actions">{[{ label: 'Book Appointment', icon: CalendarDays, to: `/appointment?view=request&pet=${selected.id}` }, { label: 'Update Health Record', icon: FileText, to: `${profile}?section=passport&record=add` }, { label: 'Plan Care', icon: Activity, to: `${profile}?section=care` }].map(({ label, icon: Icon, to }) => <Link to={to} key={label}><Icon size={18} aria-hidden="true" /><span>{label}</span><ChevronRight size={16} aria-hidden="true" /></Link>)}</div></PetSection>
+  </> : <PetSection title="Pet preview"><p className="pets-muted">Select or add a pet to see their details here.</p></PetSection>}</aside></div><MockSyncState /></div>;
 }

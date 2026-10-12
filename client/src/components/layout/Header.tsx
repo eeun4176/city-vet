@@ -1,6 +1,7 @@
-import { Bell, Download, Search, X } from 'lucide-react';
+import { Bell, Download, Plus, Search, X } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { primaryButtonClasses } from '../ui/Button';
 import { defaultAccountItems, defaultNavigationItems } from './Sidebar';
 import { usePortal } from '../../hooks/usePortal';
 
@@ -8,6 +9,8 @@ const iconButton = 'portal-icon-button flex shrink-0 cursor-pointer items-center
 
 export default function Header() {
   const { pathname } = useLocation();
+  const [params, setParams] = useSearchParams();
+  const petsLanding = pathname === '/my-pets';
   const today = new Date();
   const hour = today.getHours();
   const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -17,7 +20,11 @@ export default function Header() {
   const [downloadMessage, setDownloadMessage] = useState('');
   const notificationRef = useRef<HTMLDetailsElement>(null);
   const { pets, requests: serviceRequests } = usePortal();
-  const normalizedQuery = query.trim().toLowerCase();
+  const normalizedQuery = petsLanding ? '' : query.trim().toLowerCase();
+  function changeSearch(value: string) {
+    if (petsLanding) setParams(current => { const next = new URLSearchParams(current); if (value) next.set('q', value); else next.delete('q'); return next; }, { replace: true });
+    else setQuery(value);
+  }
   const results = [
     ...[...defaultNavigationItems, ...defaultAccountItems].filter(item => item.href).map(item => ({ label: item.label, description: 'Page', to: item.href! })),
     ...pets.map(pet => ({ label: pet.name, description: pet.breed, to: `/my-pets?pet=${pet.id}` })),
@@ -43,12 +50,13 @@ export default function Header() {
     setDownloadMessage('Preview summary downloaded.');
   }
 
-  return <header className={`portal-header${pathname === '/' ? ' portal-header-home' : ''}`}>
+  return <header className={`portal-header${pathname === '/' ? ' portal-header-home' : ''}${petsLanding ? ' portal-header-pets' : ''}`}>
+    {petsLanding && <div className="pet-landing-heading"><h1 className="h1-34-500">My Pets</h1><p>Companions, care, and everyday moments.</p></div>}
     {pathname === '/' && <div className="portal-welcome"><div><time className="portal-welcome-date caption-12-700" dateTime={localDate}>{today.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</time><h1 className="h1-34-500">{greeting}, Juan!</h1></div></div>}
     <div className="portal-search relative min-w-0" onFocus={() => setSearchFocused(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setSearchFocused(false); }}>
       <label className="flex h-10 items-center gap-2 rounded-xl border border-transparent bg-primary-100/35 px-3 focus-within:border-primary-400">
-        <Search className="size-4 shrink-0 text-primary-700" aria-hidden="true" /><span className="sr-only">Search pages, pets, and appointments</span>
-        <input type="search" value={query} onChange={event => setQuery(event.target.value)} onKeyDown={event => { if (event.key === 'Escape') { setQuery(''); setSearchFocused(false); } }} placeholder="Search pets, appointments..." className="w-full min-w-0 bg-transparent text-xs outline-none placeholder:text-black-300" aria-controls="portal-search-results" aria-expanded={searchFocused && !!normalizedQuery} />
+        <Search className="size-4 shrink-0 text-primary-700" aria-hidden="true" /><span className="sr-only">{petsLanding ? 'Search your pets' : 'Search pages, pets, and appointments'}</span>
+        <input type="search" value={petsLanding ? params.get('q') ?? '' : query} onChange={event => changeSearch(event.target.value)} onKeyDown={event => { if (event.key === 'Escape') { changeSearch(''); setSearchFocused(false); } }} placeholder={petsLanding ? 'Search your pets…' : 'Search pets, appointments...'} className="w-full min-w-0 bg-transparent text-xs outline-none placeholder:text-black-300" aria-controls={petsLanding ? undefined : 'portal-search-results'} aria-expanded={petsLanding ? undefined : searchFocused && !!normalizedQuery} />
       </label>
       {searchFocused && normalizedQuery && <div id="portal-search-results" className="absolute top-12 z-30 max-h-80 w-full overflow-auto rounded-xl border border-border bg-white p-2 shadow-lg"><p className="px-2 py-2 text-[10px] font-semibold uppercase tracking-wide text-black-300">Search results</p>{results.length ? results.map(item => <Link key={item.to} to={item.to} onClick={() => { setQuery(''); setSearchFocused(false); }} className="block rounded-lg px-3 py-2 text-xs hover:bg-primary-100/30 focus-visible:outline-2 focus-visible:outline-primary-600"><span className="block font-medium">{item.label}</span><span className="mt-1 block text-[10px] text-black-300">{item.description}</span></Link>) : <p className="px-3 py-4 text-xs text-black-300">No matching pages or records.</p>}</div>}
     </div>
@@ -58,6 +66,7 @@ export default function Header() {
         <div className="absolute right-0 top-12 z-30 w-[min(300px,calc(100vw-104px))] rounded-xl border border-border bg-white p-4 shadow-lg"><div className="mb-4 flex items-center justify-between"><h2 className="text-sm font-semibold">Notifications</h2><button className="cursor-pointer rounded p-1 hover:bg-background" aria-label="Close notifications" onClick={() => { if (notificationRef.current) notificationRef.current.open = false; }}><X className="size-4" /></button></div><p className="mb-3 text-[11px] text-black-300">Sample service request updates</p>{serviceRequests.map(request => <Link key={request.id} to={`/appointment?request=${request.id}`} onClick={() => { if (notificationRef.current) notificationRef.current.open = false; }} className="block rounded-lg p-2 hover:bg-background"><p className="text-xs font-medium">{request.service}</p><p className="mt-1 text-[11px] text-black-300">Application status: {request.status}</p></Link>)}</div>
       </details>
       <button type="button" className={iconButton} aria-label="Download dashboard summary" title="Download summary" onClick={downloadSummary}><Download className="size-4" /></button>
+      {petsLanding && <Link to="/my-pets/new" className={primaryButtonClasses}><Plus size={16} aria-hidden="true" />Add New Pet</Link>}
     </div>
     <span className="sr-only" role="status">{downloadMessage}</span>
   </header>;
