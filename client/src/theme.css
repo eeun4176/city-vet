@@ -1,24 +1,24 @@
 ﻿@theme {
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Figtree', sans-serif;
   --spacing: 4px;
-  --text-detail: 0.7142857rem;
-  --text-overline: 0.7857143rem;
-  --text-xs: 0.8571429rem;
-  --text-sm: 1rem;
-  --text-base: 1rem;
-  --text-card: 1.1428571rem;
-  --text-lg: 1.2857143rem;
-  --text-xl: 1.4285714rem;
-  --text-subtitle: 1.5714286rem;
-  --text-2xl: 1.7857143rem;
-  --text-3xl: 2rem;
-  --text-4xl: 2rem;
+  --text-detail: 12px;
+  --text-overline: 13px;
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-base: 17px;
+  --text-card: 18px;
+  --text-lg: 22px;
+  --text-xl: 30px;
+  --text-subtitle: 22px;
+  --text-2xl: 30px;
+  --text-3xl: 34px;
+  --text-4xl: 34px;
   --color-primary-100: #cceede;
   --color-primary-200: #99dcbd;
   --color-primary-300: #67cb9c;
   --color-primary-400: #34b97b;
   --color-primary-500: #01a85a;
-  --color-primary-600: #018648;
+  --color-primary-600: #01a85a;
   --color-primary-700: #016536;
   --color-primary-800: #004324;
   --color-primary-900: #002212;
@@ -69,6 +69,6 @@
   --color-info-900: #12262c;
   --color-white-600: rgb(255 255 255 / 60%);
   --color-white-500: #ffffff;
-  --color-background: #f8f9fa;
+  --color-background: #f6f8f7;
   --color-border: #e6e9e7;
 }

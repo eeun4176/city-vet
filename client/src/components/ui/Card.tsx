@@ -37,6 +37,6 @@ export function AppointmentRow({ request, pet }: { request: ServiceRequest; pet:
 }
 
 export function Panel({ title, children }: { title: string; children: ReactNode }) {
-  return <section className="rounded-2xl border border-border bg-white p-5 sm:p-7"><h2 className="mb-5 text-lg font-semibold text-black-500">{title}</h2>{children}</section>;
+  return <section className="rounded-2xl border border-border bg-white p-5 sm:p-7"><h2 className="mb-5 subheading-22-600 text-black-500">{title}</h2>{children}</section>;
 }
 

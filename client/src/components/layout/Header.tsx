@@ -1,12 +1,17 @@
 import { Bell, Download, PawPrint, Search, X } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { defaultAccountItems, defaultNavigationItems } from './Sidebar';
 import { usePortal } from '../../hooks/usePortal';
 
 const iconButton = 'portal-icon-button flex shrink-0 cursor-pointer items-center justify-center rounded-full text-primary-600 focus-visible:outline-2 focus-visible:outline-primary-600';
 
 export default function Header() {
+  const { pathname } = useLocation();
+  const today = new Date();
+  const hour = today.getHours();
+  const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
   const [query, setQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
   const [downloadMessage, setDownloadMessage] = useState('');
@@ -38,7 +43,8 @@ export default function Header() {
     setDownloadMessage('Preview summary downloaded.');
   }
 
-  return <header className="portal-header">
+  return <header className={`portal-header${pathname === '/' ? ' portal-header-home' : ''}`}>
+    {pathname === '/' && <div className="portal-welcome"><span className="portal-welcome-icon"><PawPrint size={24} aria-hidden="true" /></span><div><time className="portal-welcome-date caption-12-700" dateTime={localDate}>{today.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</time><h1 className="h1-34-500">{greeting}, Juan!</h1></div></div>}
     <div className="portal-search relative min-w-0" onFocus={() => setSearchFocused(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setSearchFocused(false); }}>
       <label className="flex h-10 items-center gap-2 rounded-xl border border-transparent bg-primary-100/35 px-3 focus-within:border-primary-400">
         <Search className="size-4 shrink-0 text-primary-700" aria-hidden="true" /><span className="sr-only">Search pages, pets, and appointments</span>
@@ -52,7 +58,6 @@ export default function Header() {
         <div className="absolute right-0 top-12 z-30 w-[min(300px,calc(100vw-104px))] rounded-xl border border-border bg-white p-4 shadow-lg"><div className="mb-4 flex items-center justify-between"><h2 className="text-sm font-semibold">Notifications</h2><button className="cursor-pointer rounded p-1 hover:bg-background" aria-label="Close notifications" onClick={() => { if (notificationRef.current) notificationRef.current.open = false; }}><X className="size-4" /></button></div><p className="mb-3 text-[11px] text-black-300">Sample service request updates</p>{serviceRequests.map(request => <Link key={request.id} to={`/appointment?request=${request.id}`} onClick={() => { if (notificationRef.current) notificationRef.current.open = false; }} className="block rounded-lg p-2 hover:bg-background"><p className="text-xs font-medium">{request.service}</p><p className="mt-1 text-[11px] text-black-300">Application status: {request.status}</p></Link>)}</div>
       </details>
       <button type="button" className={iconButton} aria-label="Download dashboard summary" title="Download summary" onClick={downloadSummary}><Download className="size-4" /></button>
-      <Link to="/my-pets?view=register" className="primary-button inline-flex items-center justify-center gap-2 rounded-full bg-primary-600 px-4 text-sm font-semibold text-white hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"><PawPrint className="size-4" aria-hidden="true" /><span>Register Pet</span></Link>
     </div>
     <span className="sr-only" role="status">{downloadMessage}</span>
   </header>;
