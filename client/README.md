@@ -1,16 +1,30 @@
-# React + Vite
+# City Vet client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React and TypeScript portal built with Vite and Tailwind CSS. Pet profiles and appointment requests use sample data held in memory; refreshing resets them.
 
-Currently, two official plugins are available:
+## Development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm ci
+npm run dev
+npm run typecheck
+npm run build
+npm run lint
+```
 
-## React Compiler
+## Source structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `src/assets/`: logo, hero image, and pet photos. Photo sources are documented in `src/assets/pets/README.md`.
+- `src/components/layout/`: sidebar, header, and mobile bottom navigation.
+- `src/components/ui/`: shared buttons, cards, badges, inputs, and page helpers.
+- `src/data/`: mock pets, mock appointments, and dashboard sample content.
+- `src/pages/`: Home, Pets, Appointments, Care, Assistant, and the existing account, settings, community, and fallback pages.
+- `src/layouts/OwnerLayout.tsx`: owner portal shell.
+- `src/hooks/`: shared React hooks.
+- `src/lib/`: portal context and state provider.
+- `src/types/`: shared TypeScript models.
+- `src/services/`: reserved for future API integration.
 
-## Expanding the ESLint configuration
+The Assistant page provides navigation shortcuts. A conversational assistant is not connected.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+`index.html`, TypeScript declarations, configuration files, and the dependency lockfile support the application even though the reference tree omits them. `node_modules/` and `dist/` are generated; do not commit them.
