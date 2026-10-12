@@ -41,7 +41,7 @@ export default function Pets() {
       </form>
     </Panel> : <>
       {selectedPet && <div className="mb-6"><Panel title={`${selectedPet.name}'s profile`}><Link to="/my-pets" className="secondary-button mb-5 inline-flex items-center gap-1 text-xs text-primary-700"><ArrowLeft className="size-3" />All pets</Link><dl className="grid gap-5 text-sm sm:grid-cols-2 lg:grid-cols-4">{[['Species', selectedPet.species], ['Breed', selectedPet.breed], ['Age', selectedPet.age], ['Sex', selectedPet.sex]].map(([label, value]) => <div key={label}><dt className="text-xs text-black-300">{label}</dt><dd className="mt-2 font-medium">{value}</dd></div>)}</dl></Panel></div>}
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{pets.map(pet => <PetCard key={pet.id} pet={pet} />)}</div>
+      <div className="pet-card-grid">{pets.map(pet => <PetCard key={pet.id} pet={pet} />)}</div>
       <p className="mt-6 text-xs text-black-300">Preview pet profiles · New pets are kept until this page is refreshed.</p>
     </>}
   </>;

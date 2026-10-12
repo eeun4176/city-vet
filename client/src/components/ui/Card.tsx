@@ -18,7 +18,7 @@ export function PetCard({ pet }: { pet: Pet }) {
     <PetPhoto pet={pet} className="pet-card-photo" />
     <div className="pet-card-nameplate">
       <div className="min-w-0 flex-1"><h3 className="truncate text-card font-semibold">{pet.name} <span className="font-normal text-primary-700">{pet.sex === 'Male' ? '♂' : pet.sex === 'Female' ? '♀' : ''}</span></h3><p className="mt-1 text-[11px] leading-4 text-black-300">{pet.breed} · {pet.age}</p></div>
-      <span className="pet-card-arrow"><ChevronRight className="size-5" aria-hidden="true" /></span>
+      <span className="pet-card-arrow"><ChevronRight size={24} aria-hidden="true" /></span>
     </div>
   </Link>;
 }
@@ -27,11 +27,15 @@ export function AppointmentRow({ request, pet }: { request: ServiceRequest; pet:
   const date = new Date(`${request.date}T12:00:00`);
   return <Link to={`/appointment?request=${request.id}`} className="appointment-row group rounded-xl focus-visible:outline-2 focus-visible:outline-primary-600">
     <div className="appointment-date"><span className="text-[10px] uppercase text-black-300">{date.toLocaleDateString('en', { month: 'short' })}</span><span className="text-xl font-semibold leading-7">{date.getDate()}</span><span className="text-[10px] text-black-300">{request.time}</span></div>
-    <div className="appointment-body group-hover:shadow-sm">
-      <PetPhoto pet={pet} className="size-8 shrink-0 rounded-full" />
-      <div className="min-w-0 flex-1"><div className="mb-1 flex items-center gap-1.5"><span className="text-xs text-black-300">{pet.name}</span>{request.status === 'Approved' && <Check className="size-3 text-primary-600" aria-hidden="true" />}</div><h3 className="text-sm font-medium">{request.service}</h3></div>
-      <span className="appointment-location"><MapPin className="size-3 shrink-0" aria-hidden="true" />{request.location}</span>
-      <div className="flex items-center gap-2"><StatusBadge status={request.status} /><ArrowUpRight className="size-4 text-black-200" aria-hidden="true" /></div>
+    <div className="appointment-body">
+      <div className="appointment-summary">
+        <div className="appointment-pet"><PetPhoto pet={pet} className="size-7 shrink-0 rounded-full" /><span>{pet.name}</span>{request.status === 'Approved' && <Check size={13} className="text-primary-600" aria-hidden="true" />}</div>
+        <h3 className="text-sm font-medium">{request.service}</h3>
+      </div>
+      <div className="appointment-meta">
+        <span className="appointment-location"><MapPin size={13} className="shrink-0" aria-hidden="true" />{request.location}</span>
+        <div className="appointment-status"><StatusBadge status={request.status} /><ArrowUpRight size={16} className="text-black-200" aria-hidden="true" /></div>
+      </div>
     </div>
   </Link>;
 }

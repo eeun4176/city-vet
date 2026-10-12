@@ -1,4 +1,4 @@
-import { Bell, Download, PawPrint, Search, X } from 'lucide-react';
+import { Bell, Download, Search, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { defaultAccountItems, defaultNavigationItems } from './Sidebar';
@@ -44,7 +44,7 @@ export default function Header() {
   }
 
   return <header className={`portal-header${pathname === '/' ? ' portal-header-home' : ''}`}>
-    {pathname === '/' && <div className="portal-welcome"><span className="portal-welcome-icon"><PawPrint size={24} aria-hidden="true" /></span><div><time className="portal-welcome-date caption-12-700" dateTime={localDate}>{today.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</time><h1 className="h1-34-500">{greeting}, Juan!</h1></div></div>}
+    {pathname === '/' && <div className="portal-welcome"><div><time className="portal-welcome-date caption-12-700" dateTime={localDate}>{today.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</time><h1 className="h1-34-500">{greeting}, Juan!</h1></div></div>}
     <div className="portal-search relative min-w-0" onFocus={() => setSearchFocused(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setSearchFocused(false); }}>
       <label className="flex h-10 items-center gap-2 rounded-xl border border-transparent bg-primary-100/35 px-3 focus-within:border-primary-400">
         <Search className="size-4 shrink-0 text-primary-700" aria-hidden="true" /><span className="sr-only">Search pages, pets, and appointments</span>

@@ -13,17 +13,17 @@ export interface SidebarItem {
 }
 
 export const defaultNavigationItems: SidebarItem[] = [
-  { id: 'home', label: 'Home', icon: House, iconSize: 24, href: '/' },
-  { id: 'pets', label: 'My Pets', icon: PawPrint, iconSize: 26, href: '/my-pets' },
-  { id: 'appointments', label: 'Appointment', icon: CalendarDays, iconSize: 24, href: '/appointment' },
-  { id: 'care', label: 'Care', icon: Heart, iconSize: 24, href: '/care' },
+  { id: 'home', label: 'Home', icon: House, iconSize: 22, href: '/' },
+  { id: 'pets', label: 'My Pets', icon: PawPrint, iconSize: 22, href: '/my-pets' },
+  { id: 'appointments', label: 'Appointment', icon: CalendarDays, iconSize: 22, href: '/appointment' },
+  { id: 'care', label: 'Care', icon: Heart, iconSize: 22, href: '/care' },
   { id: 'assistant', label: 'Assistant', icon: MessageCircle, iconSize: 22, href: '/assistant' },
-  { id: 'community', label: 'Community', icon: UsersRound, iconSize: 26, href: '/community' },
+  { id: 'community', label: 'Community', icon: UsersRound, iconSize: 22, href: '/community' },
 ];
 
 export const defaultAccountItems: SidebarItem[] = [
-  { id: 'account', label: 'Account', icon: UserRound, iconSize: 24, href: '/account' },
-  { id: 'settings', label: 'Settings', icon: Settings, iconSize: 24, href: '/settings' },
+  { id: 'account', label: 'Account', icon: UserRound, iconSize: 22, href: '/account' },
+  { id: 'settings', label: 'Settings', icon: Settings, iconSize: 22, href: '/settings' },
   { id: 'logout', label: 'Logout', icon: LogOut, iconSize: 22 },
 ];
 

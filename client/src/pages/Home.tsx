@@ -93,8 +93,8 @@ export default function Home() {
       <div className="dashboard-quick-actions">{actions.map(({ label, description, to, icon: Icon }) => <Link key={label} to={to} className="dashboard-quick-action"><span className="dashboard-quick-action-icon"><Icon size={28} strokeWidth={1.5} aria-hidden="true" /></span><span className="dashboard-quick-action-label">{label}</span><span className="dashboard-quick-action-description">{description}</span></Link>)}</div>
     </section>
 
-    <aside className="dashboard-aside dashboard-surface" aria-label="Account progress, pet tips, and activities">
-    <section aria-labelledby="setup-heading" className="dashboard-setup-panel">
+    <aside className="dashboard-aside" aria-label="Account progress, pet tips, and activities">
+    <section aria-labelledby="setup-heading" className="dashboard-setup-panel dashboard-surface">
       <div className="dashboard-setup-header"><div><p className="dashboard-overline">YOUR NEXT CHAPTER</p><h2 id="setup-heading" className="dashboard-section-heading">Make yourself at home</h2><p className="dashboard-helper">{completedSteps} of {setupSteps.length} small steps complete.</p></div><CircularProgress completed={completedSteps} total={setupSteps.length} /></div>
       <ul className="dashboard-setup-steps">{setupSteps.map(step => <li key={step.label}><Link to={step.to}><span className={`setup-step-icon ${step.complete ? 'is-complete' : ''}`}>{step.complete ? <Check size={11} aria-label="Complete" /> : <Circle size={15} aria-label="Incomplete" />}</span><span>{step.label}</span>{!step.complete && <ChevronRight size={12} aria-hidden="true" />}</Link></li>)}</ul>
     </section>
@@ -107,8 +107,7 @@ export default function Home() {
           {tip.source && <a href={tip.source} target="_blank" rel="noreferrer" className="dashboard-tip-source">Read more from the AVMA <ArrowRight size={12} aria-hidden="true" /></a>}
         </div>
       </section>
-      <hr className="dashboard-section-divider" />
-      <section aria-labelledby="activity-heading" className="dashboard-tasks">
+      <section aria-labelledby="activity-heading" className="dashboard-tasks dashboard-surface">
         <div className="dashboard-section-topline"><h2 id="activity-heading" className="dashboard-section-heading">Today's Activity</h2><span className="dashboard-completion">{completedActivities}/{activities.length}</span></div>
         <div className="dashboard-pet-filters" aria-label="Filter activity by pet">{[{ id: 'all', name: 'All pets' }, ...pets].map(pet => <button type="button" key={pet.id} onClick={() => setActivityPet(pet.id)} aria-pressed={activityPet === pet.id} className="secondary-button dashboard-pet-filter">{'species' in pet && <PetPhoto pet={pet} className="size-5 shrink-0 rounded-full" />}{pet.name}</button>)}</div>
         <div className="dashboard-task-list">{filteredActivities.map(task => <TaskRow key={task.id} task={task} onToggle={toggleActivity} onEdit={editTask} onRemove={removeTask} />)}{filteredActivities.length === 0 && <div className="dashboard-empty-state"><span className="dashboard-empty-check"><Check size={18} aria-hidden="true" /></span><p>All clear for today.</p><span>A little breathing room for you and your pet.</span></div>}</div>
@@ -117,7 +116,7 @@ export default function Home() {
       </section>
     </aside>
     <section aria-labelledby="appointments-heading" className="dashboard-appointments">
-      <div className="dashboard-section-topline"><h2 id="appointments-heading" className="dashboard-section-heading">Upcoming Appointments</h2><Link to="/appointment" className={textLink}>View appointments <ArrowRight size={13} aria-hidden="true" /></Link></div>
+      <div className="dashboard-section-topline"><h2 id="appointments-heading" className="dashboard-section-heading" style={{ fontSize: '20px' }}>Upcoming Appointments</h2><Link to="/appointment" className={textLink}>View appointments <ArrowRight size={13} aria-hidden="true" /></Link></div>
       <div className="dashboard-appointment-list">{upcomingRequests.map(request => <AppointmentRow key={request.id} request={request} pet={pets.find(pet => pet.id === request.petId)!} />)}{upcomingRequests.length === 0 && <p className="dashboard-empty-state">No upcoming appointments. A little care starts with your next booking.</p>}</div>
       <p className="dashboard-appointment-note">Pending and under-review requests show your preferred date. Visits are confirmed after approval.</p>
     </section>

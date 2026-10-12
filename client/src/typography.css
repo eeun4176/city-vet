@@ -20,32 +20,211 @@
   --type-small-11-600: 600 11px/normal var(--font-sans);
 }
 
-.h1-34-500, .portal-welcome h1 { font: var(--type-h1-34-500); letter-spacing: -.68px; }
-.title-30-500, .circular-progress-label, .appointment-date > span:nth-child(2) { font: var(--type-title-30-500); letter-spacing: -.9px; font-variant-numeric: tabular-nums; }
-.subheading-22-600, .dashboard-section-heading, .dashboard-setup-header .dashboard-section-heading, .dashboard-tip-heading h2, .task-editor-heading h2 { font: var(--type-subheading-22-600); letter-spacing: -.22px; }
-.link-18-600, .pet-card-nameplate h3 { font: var(--type-link-18-600); letter-spacing: -.36px; }
-.body-17-500, .portal-sidebar nav .sidebar-label { font: var(--type-body-17-500); letter-spacing: normal; }
-.body-17-400 { font: var(--type-body-17-400); letter-spacing: normal; }
-.body-16-500, .appointment-body h3, .task-title, .dashboard-tip h3 { font: var(--type-body-16-500); letter-spacing: normal; }
-.body-16-400, .dashboard-tip-description, .task-editor-field input, .task-editor-field textarea { font: var(--type-body-16-400); letter-spacing: normal; }
-.link-15-500, .primary-button, .dashboard-quick-action-label { font: var(--type-link-15-500); letter-spacing: normal; }
-.small-body-15-400, .pet-card-nameplate p { font: var(--type-small-body-15-400); letter-spacing: normal; }
-.link-14-500, .dashboard-text-link, .dashboard-setup-steps a, .dashboard-pet-filter { font: var(--type-link-14-500); letter-spacing: normal; }
-.link-14-400 { font: var(--type-link-14-400); letter-spacing: normal; }
-.caption-13-500, .dashboard-completion, .task-editor-field { font: var(--type-caption-13-500); letter-spacing: normal; font-variant-numeric: tabular-nums; }
-.caption-13-400, .dashboard-helper, .appointment-location, .task-detail, .task-menu-panel button, .task-cancel, .dashboard-task-feedback, .dashboard-task-feedback button, .task-editor-error, .portal-search input { font: var(--type-caption-13-400); letter-spacing: normal; }
-.caption-12-700, .dashboard-overline, .dashboard-eyebrow { font: var(--type-caption-12-700); letter-spacing: .72px; text-transform: uppercase; }
-.caption-12-500, .dashboard-count, .appointment-body > div > div > span, .appointment-date > span:first-child { font: var(--type-caption-12-500); letter-spacing: normal; font-variant-numeric: tabular-nums; }
-.caption-12-400, .dashboard-quick-action-description, .dashboard-pet-hint, .dashboard-appointment-note, .dashboard-tip-source, .dashboard-preview-note, .appointment-date > span:last-child, .task-field-optional { font: var(--type-caption-12-400); letter-spacing: normal; }
-.small-11-600, .status-badge, .bottom-navigation-link { font: var(--type-small-11-600); letter-spacing: normal; }
+.h1-34-500,
+.portal-welcome h1 {
+  font: var(--type-h1-34-500);
+  letter-spacing: -.68px;
+}
 
-body { font: var(--type-body-17-400); }
-:where(.portal-content [class~="text-[10px]"]) { font: var(--type-caption-12-400); }
-:where(.portal-content [class~="text-[11px]"]) { font: var(--type-caption-13-400); }
-.portal-welcome-date { display: block; margin-bottom: 6px; color: var(--color-black-300); }
-.portal-search input { line-height: 1.4; }
-.pet-card-nameplate p, .dashboard-tip-description, .task-detail, .dashboard-appointment-note { line-height: 1.5; }
-.circular-progress-label > span { font: var(--type-caption-12-500); font-variant-numeric: tabular-nums; }
-.portal-sidebar > button strong { font: var(--type-link-14-500); }
-.portal-sidebar > button .sidebar-label > span { font: var(--type-caption-12-400); }
-.bottom-navigation-link > span { width: 100%; height: 28px; line-height: 14px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center; }
+.title-30-500,
+.circular-progress-label,
+.appointment-date>span:nth-child(2) {
+  font: var(--type-title-30-500);
+  letter-spacing: -.9px;
+  font-variant-numeric: tabular-nums;
+}
+
+.subheading-22-600,
+.dashboard-section-heading,
+.task-editor-heading h2 {
+  font: var(--type-subheading-22-600);
+  letter-spacing: -.22px;
+}
+
+.dashboard-hero .dashboard-section-heading,
+.dashboard-featured .dashboard-section-heading,
+.dashboard-setup-header .dashboard-section-heading,
+.dashboard-tip-heading h2,
+.dashboard-tasks .dashboard-section-heading {
+  font: 600 20px /1.4 var(--font-sans);
+  letter-spacing: -.16px;
+  color: #111;
+}
+
+.link-18-600 {
+  font: var(--type-link-18-600);
+  letter-spacing: -.36px;
+}
+
+.pet-card-nameplate h3 {
+  font: var(--type-body-16-500);
+  letter-spacing: -.16px;
+  color: #111;
+}
+
+.body-17-500,
+.portal-sidebar nav .sidebar-label {
+  font: var(--type-body-17-500);
+  letter-spacing: normal;
+}
+
+.body-17-400 {
+  font: var(--type-body-17-400);
+  letter-spacing: normal;
+}
+
+.body-16-500,
+.appointment-body h3,
+.task-title,
+.dashboard-tip h3 {
+  font: var(--type-body-16-500);
+  letter-spacing: normal;
+}
+
+.body-16-400,
+.appointment-pet>span,
+.dashboard-tip-description,
+.task-editor-field input,
+.task-editor-field textarea {
+  font: var(--type-body-16-400);
+  letter-spacing: normal;
+}
+
+.link-15-500,
+.primary-button,
+.dashboard-quick-action-label {
+  font: var(--type-link-15-500);
+  letter-spacing: normal;
+}
+
+.small-body-15-400 {
+  font: var(--type-small-body-15-400);
+  letter-spacing: normal;
+}
+
+.pet-card-nameplate p {
+  font: var(--type-caption-12-400);
+  letter-spacing: normal;
+}
+
+.link-14-500,
+.dashboard-text-link,
+.dashboard-setup-steps a,
+.dashboard-pet-filter {
+  font: var(--type-link-14-500);
+  letter-spacing: normal;
+}
+
+.link-14-400 {
+  font: var(--type-link-14-400);
+  letter-spacing: normal;
+}
+
+.caption-13-500,
+.dashboard-completion,
+.task-editor-field {
+  font: var(--type-caption-13-500);
+  letter-spacing: normal;
+  font-variant-numeric: tabular-nums;
+}
+
+.caption-13-400,
+.dashboard-helper,
+.appointment-location,
+.task-detail,
+.task-menu-panel button,
+.task-cancel,
+.dashboard-task-feedback,
+.dashboard-task-feedback button,
+.task-editor-error,
+.portal-search input {
+  font: var(--type-caption-13-400);
+  letter-spacing: normal;
+}
+
+.caption-12-700,
+.dashboard-overline,
+.dashboard-eyebrow {
+  font: var(--type-caption-12-700);
+  letter-spacing: .72px;
+  text-transform: uppercase;
+}
+
+.caption-12-500,
+.dashboard-count,
+.appointment-date>span:first-child {
+  font: var(--type-caption-12-500);
+  letter-spacing: normal;
+  font-variant-numeric: tabular-nums;
+}
+
+.caption-12-400,
+.dashboard-quick-action-description,
+.dashboard-pet-hint,
+.dashboard-appointment-note,
+.dashboard-tip-source,
+.dashboard-preview-note,
+.appointment-date>span:last-child,
+.task-field-optional {
+  font: var(--type-caption-12-400);
+  letter-spacing: normal;
+}
+
+.small-11-600,
+.status-badge,
+.bottom-navigation-link {
+  font: var(--type-small-11-600);
+  letter-spacing: normal;
+}
+
+body {
+  font: var(--type-body-17-400);
+}
+
+:where(.portal-content [class~="text-[10px]"]) {
+  font: var(--type-caption-12-400);
+}
+
+:where(.portal-content [class~="text-[11px]"]) {
+  font: var(--type-caption-13-400);
+}
+
+.portal-welcome-date {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-black-300);
+}
+
+.portal-search input {
+  line-height: 1.4;
+}
+
+.pet-card-nameplate p,
+.dashboard-tip-description,
+.task-detail,
+.dashboard-appointment-note {
+  line-height: 1.5;
+}
+
+.circular-progress-label>span {
+  font: var(--type-caption-12-500);
+  font-variant-numeric: tabular-nums;
+}
+
+.portal-sidebar>button strong {
+  font: var(--type-link-14-500);
+}
+
+.portal-sidebar>button .sidebar-label>span {
+  font: var(--type-caption-12-400);
+}
+
+.bottom-navigation-link>span {
+  width: 100%;
+  height: 28px;
+  line-height: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+}
